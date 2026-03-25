@@ -1,4 +1,12 @@
 {
+  "name": "bookflix-backend",
+  "version": "1.0.0",
+  "description": "Backend for Bookflix",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
