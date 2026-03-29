@@ -83,39 +83,5 @@ router.put("/:id/follow", authMiddleware, async (req, res) => {
   }
 });
 
-/* ================= UPGRADE SUBSCRIPTION ================= */
-router.post("/subscribe", authMiddleware, async (req, res) => {
-  try {
-    const { plan, durationMonths } = req.body;
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const months = durationMonths || 1;
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + months);
-
-    user.subscription = {
-      plan: plan || "Premium",
-      status: "active",
-      startDate: startDate,
-      endDate: endDate,
-    };
-
-    await user.save();
-
-    res.json({ 
-      success: true, 
-      message: `Successfully subscribed to ${plan} plan!`,
-      subscription: user.subscription
-    });
-  } catch (error) {
-    console.error("Error activating subscription:", error);
-    res.status(500).json({ message: "Error processing subscription" });
-  }
-});
-
 module.exports = router;
+

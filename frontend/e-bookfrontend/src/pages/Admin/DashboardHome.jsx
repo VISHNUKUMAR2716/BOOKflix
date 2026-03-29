@@ -14,6 +14,7 @@ export default function DashboardHome() {
   const [stats, setStats] = useState({
     totalBooks: 0,
     totalLikes: 0,
+    upcomingCount: 0,
   });
 
   useEffect(() => {
@@ -77,7 +78,8 @@ export default function DashboardHome() {
 
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+
 
         {/* Books */}
         <div className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 overflow-hidden border">
@@ -137,31 +139,48 @@ export default function DashboardHome() {
         </div>
 
 
+        {/* Upcoming */}
+        <div className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 p-6 overflow-hidden border">
+          <div className="absolute -right-6 -top-6 w-28 h-28 bg-purple-100 rounded-full group-hover:scale-110 transition"></div>
+          <div className="flex items-center justify-between mb-6 relative z-10">
+            <div>
+              <p className="text-sm font-semibold text-gray-400 uppercase">
+                Upcoming Releases
+              </p>
+              <h2 className="text-4xl font-extrabold text-purple-600 mt-1">
+                {stats.upcomingCount || 0}
+              </h2>
+            </div>
+            <div className="bg-purple-100 p-3 rounded-xl">
+              <Calendar size={24} className="text-purple-600" />
+            </div>
+          </div>
+          <p className="text-sm text-gray-500">
+            Books scheduled to be released automatically.
+          </p>
+          <div className="absolute bottom-0 left-0 h-1 w-full bg-gradient-to-r from-purple-400 to-indigo-600"></div>
+        </div>
+
         {/* System Status */}
         <div className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-2xl shadow-lg p-6 flex flex-col justify-between">
-
           <div>
             <p className="text-sm opacity-80">Admin Status</p>
-
             <h2 className="text-2xl font-bold mt-1">
               System Running Smoothly
             </h2>
           </div>
-
           <div className="mt-6 flex items-center justify-between">
             <span className="text-sm opacity-90">
               All services operational
             </span>
-
             <span className="bg-white/20 px-3 py-1 rounded-full text-xs flex items-center gap-1">
               <CheckCircle size={16} />
               Active
             </span>
           </div>
-
         </div>
-
       </div>
+
 
 
       {/* Quick Actions */}

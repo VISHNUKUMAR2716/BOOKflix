@@ -12,7 +12,9 @@ exports.getRecommendations = async (req, res) => {
     }
 
     // 1. Extract viewed book IDs and categories
-    const viewedBookIds = user.booksViewed.map((v) => v.book._id.toString());
+    const viewedBookIds = user.booksViewed
+      .filter((v) => v.book)
+      .map((v) => v.book._id.toString());
     const categoryCounts = {};
 
     user.booksViewed.forEach((v) => {
@@ -21,6 +23,7 @@ exports.getRecommendations = async (req, res) => {
         categoryCounts[catId] = (categoryCounts[catId] || 0) + 1;
       }
     });
+
 
     // 2. Sort categories by frequency
     const sortedCategories = Object.keys(categoryCounts).sort(
@@ -60,9 +63,10 @@ exports.getRecommendations = async (req, res) => {
     // Add "reason" for each recommendation (simplified for now)
     const processedRecommendations = recommendations.map((book) => {
       let reason = "Popular in our community";
-      if (sortedCategories.includes(book.category._id.toString())) {
+      if (book.category && sortedCategories.includes(book.category._id?.toString())) {
         reason = `Based on your interest in ${book.category.name}`;
       } else if (book.averageRating > 4) {
+
         reason = "Highly rated by other readers";
       }
       return { 

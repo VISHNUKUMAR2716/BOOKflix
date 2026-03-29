@@ -5,7 +5,7 @@ const Category = require("../models/category");
 // Upload Book (Admin Only)
 exports.uploadBook = async (req, res) => {
   try {
-    const { title, author, category } = req.body;
+    const { title, author, category, releaseDate } = req.body;
     if (!title || !author || !category) {
       return res
         .status(400)
@@ -14,6 +14,13 @@ exports.uploadBook = async (req, res) => {
     if (!req.files?.pdf) {
       return res.status(400).json({ message: "PDF file is required" });
     }
+    
+    // Determine status: if releaseDate is in the future, it's upcoming
+    let status = "approved";
+    if (releaseDate && new Date(releaseDate) > new Date()) {
+      status = "upcoming";
+    }
+
     const newBook = new Book({
       title,
       author,
@@ -24,7 +31,10 @@ exports.uploadBook = async (req, res) => {
         ? req.files.thumbnail[0].filename
         : "default-thumbnail.png",
       uploadedBy: req.user.id,
+      releaseDate: releaseDate ? new Date(releaseDate) : null,
+      status,
     });
+
     await newBook.save();
     res.status(201).json({ message: "Book uploaded successfully" });
   } catch (error) {
@@ -36,7 +46,7 @@ exports.uploadBook = async (req, res) => {
 // Upload Book (Authenticated Users)
 exports.userUploadBook = async (req, res) => {
   try {
-    const { title, author, category } = req.body;
+    const { title, author, category, releaseDate } = req.body;
 
     if (!title || !author || !category) {
       return res
@@ -64,8 +74,10 @@ exports.userUploadBook = async (req, res) => {
         ? req.files.thumbnail[0].filename
         : "default-thumbnail.png",
       uploadedBy: req.user.id,
+      releaseDate: releaseDate ? new Date(releaseDate) : null,
       status: "pending", // User uploads are pending until admin approves
     });
+
 
     await newBook.save();
     res.status(201).json({

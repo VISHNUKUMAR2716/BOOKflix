@@ -8,7 +8,8 @@ import {
   Tag, 
   CheckSquare, 
   Globe, 
-  TrendingUp 
+  TrendingUp,
+  CalendarDays
 } from "lucide-react";
 
 function Sidebar() {
@@ -20,11 +21,13 @@ function Sidebar() {
     { name: "Manage Posts", path: "/admin/posts", icon: <FileEdit size={20} /> },
     { name: "Manage Users", path: "/admin/users", icon: <User size={20} /> },
     { name: "Subscribers", path: "/admin/subscribers", icon: <CheckSquare size={20} /> },
-    { name: "Categories", path: "/admin/categories", icon: <Tag size={20} /> },
+    { name: "Manage Categories", path: "/admin/categories", icon: <Tag size={20} /> },
     { name: "Book Approval", path: "/admin/approval", icon: <CheckSquare size={20} /> },
+    { name: "Upcoming Books", path: "/admin/upcoming", icon: <CalendarDays size={20} /> },
     { name: "Book translation", path: "/admin/translation", icon: <Globe size={20} /> },
     { name: "Analytics", path: "/admin/analytics", icon: <TrendingUp size={20} /> },
   ];
+
 
   return (
     <motion.div

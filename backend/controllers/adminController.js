@@ -191,7 +191,7 @@ module.exports = {
     try {
       const book = await Book.findByIdAndUpdate(
         req.params.id,
-        { deleted: false },
+        { softDelete: false },
         { new: true },
       );
       res.json({ message: "Book restored", book });
@@ -215,22 +215,26 @@ module.exports = {
   // ✅ ISSUE #3 FIX: Update status field instead of approved field
   approveBook: async (req, res) => {
     try {
-      const book = await Book.findByIdAndUpdate(
-        req.params.id,
-        { status: "approved" },
-        { new: true },
-      )
+      const book = await Book.findById(req.params.id);
+      if (!book) return res.status(404).json({ message: "Book not found" });
+
+      let status = "approved";
+      if (book.releaseDate && new Date(book.releaseDate) > new Date()) {
+        status = "upcoming";
+      }
+
+      book.status = status;
+      await book.save();
+
+      const populatedBook = await Book.findById(book._id)
         .populate("category", "name")
         .populate("uploadedBy", "name email");
 
-      if (!book) {
-        return res.status(404).json({ message: "Book not found" });
-      }
-
       res.status(200).json({
-        message: "Book approved successfully",
-        book,
+        message: `Book ${status === "upcoming" ? "scheduled" : "approved"} successfully`,
+        book: populatedBook,
       });
+
     } catch (error) {
       console.error("Approve Book Error:", error);
       res
@@ -262,6 +266,39 @@ module.exports = {
       res.status(500).json({ message: "Reject failed", error: error.message });
     }
   },
+
+  scheduleBook: async (req, res) => {
+    try {
+      const { releaseDate } = req.body;
+      if (!releaseDate) {
+        return res.status(400).json({ message: "Release date is required" });
+      }
+
+      const book = await Book.findByIdAndUpdate(
+        req.params.id,
+        { 
+          status: "upcoming",
+          releaseDate: new Date(releaseDate)
+        },
+        { new: true },
+      )
+        .populate("category", "name")
+        .populate("uploadedBy", "name email");
+
+      if (!book) {
+        return res.status(404).json({ message: "Book not found" });
+      }
+
+      res.status(200).json({
+        message: "Book scheduled successfully",
+        book,
+      });
+    } catch (error) {
+      console.error("Schedule Book Error:", error);
+      res.status(500).json({ message: "Scheduling failed", error: error.message });
+    }
+  },
+
 
   // ================= CATEGORY MANAGEMENT =================
 

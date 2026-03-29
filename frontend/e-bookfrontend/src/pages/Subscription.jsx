@@ -8,7 +8,9 @@ export default function Subscription() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   
-  // Check if already subscribed to avoid re-purchasing
+  const [upgrading, setUpgrading] = useState(false);
+
+  // Check if already subscribed
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -24,9 +26,30 @@ export default function Subscription() {
     fetchUser();
   }, []);
 
-  const handleSelectPlan = (planName) => {
-    navigate(`/payment/${planName.toLowerCase()}`);
+  const handleSelectPlan = async (planName) => {
+    setUpgrading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(
+        "http://localhost:5000/api/payment/activate",
+        { plan: planName },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (res.data.success) {
+        alert(res.data.message);
+        navigate("/user", { replace: true });
+      } else {
+        alert("Failed to activate subscription. Please try again.");
+      }
+    } catch (err) {
+      console.error("Upgrade error:", err);
+      alert("Error upgrading plan. Please make sure the backend is running.");
+    } finally {
+      setUpgrading(false);
+    }
   };
+
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
@@ -87,9 +110,10 @@ export default function Subscription() {
 
               <button 
                 onClick={() => handleSelectPlan("Basic")}
-                className="w-full py-4 rounded-full font-black text-lg bg-gray-100 text-gray-800 hover:bg-gray-200 transition"
+                disabled={upgrading || currentUser?.subscription?.status === "active"}
+                className="w-full py-4 rounded-full font-black text-lg bg-gray-100 text-gray-800 hover:bg-gray-200 transition disabled:opacity-50"
               >
-                Choose Basic
+                {upgrading ? "Upgrading..." : "Choose Basic"}
               </button>
             </div>
 
@@ -129,9 +153,10 @@ export default function Subscription() {
 
               <button 
                 onClick={() => handleSelectPlan("Premium")}
-                className="w-full py-4 rounded-full font-black text-lg bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 hover:from-yellow-300 hover:to-yellow-400 transition shadow-lg shadow-yellow-500/20"
+                disabled={upgrading || currentUser?.subscription?.status === "active"}
+                className="w-full py-4 rounded-full font-black text-lg bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 hover:from-yellow-300 hover:to-yellow-400 transition shadow-lg shadow-yellow-500/20 disabled:opacity-50"
               >
-                Choose Premium
+                {upgrading ? "Upgrading..." : "Choose Premium"}
               </button>
             </div>
 

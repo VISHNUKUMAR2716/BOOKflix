@@ -157,9 +157,25 @@ router.post("/google", async (req, res) => {
       return res.status(400).json({ message: "No Google token provided" });
     }
 
+    // Debug: Log what client ID is being used
+    const clientIdUsed = process.env.GOOGLE_CLIENT_ID || "dummy_google_client_id.apps.googleusercontent.com";
+    console.log("DEBUG: Backend GOOGLE_CLIENT_ID =", JSON.stringify(clientIdUsed));
+    console.log("DEBUG: Client ID length =", clientIdUsed.length);
+    
+    // Decode token payload to see audience (without verification)
+    try {
+      const tokenParts = token.split('.');
+      const payload = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString());
+      console.log("DEBUG: Token audience (aud) =", JSON.stringify(payload.aud));
+      console.log("DEBUG: Token aud length =", payload.aud?.length);
+      console.log("DEBUG: Do they match? =", payload.aud === clientIdUsed);
+    } catch (decodeErr) {
+      console.log("DEBUG: Could not decode token for inspection:", decodeErr.message);
+    }
+
     const ticket = await googleClient.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID || "dummy_google_client_id.apps.googleusercontent.com",
+      audience: clientIdUsed,
     });
 
     const payload = ticket.getPayload();

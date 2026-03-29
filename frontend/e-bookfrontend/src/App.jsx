@@ -12,7 +12,8 @@ import FlipBook from "./pages/Flipbook";
 import Return from "./pages/Return";
 import UserProfile from "./pages/UserProfile";
 import Subscription from "./pages/Subscription";
-import Payment from "./pages/Payment";
+import UpcomingBooks from "./pages/UpcomingBooks";
+
 
 
 /* Admin Pages */
@@ -26,6 +27,8 @@ import BookApproval from "./pages/Admin/BookApproval";
 import ManageTranslations from "./pages/Admin/ManageTranslations";
 import AdminLayout from "./pages/Admin/AdminBooks";
 import Subscribers from "./pages/Admin/Subscribers";
+import ManageUpcoming from "./pages/Admin/ManageUpcoming";
+
 
 
 /* ================= ADMIN PROTECTION ================= */
@@ -144,16 +147,16 @@ function App() {
         />
 
         <Route
-          path="/payment/:plan"
+          path="/upcoming"
           element={
             <UserProtectedRoute>
-              <Payment />
+              <UpcomingBooks />
             </UserProtectedRoute>
           }
         />
 
-
         {/* ================= ADMIN ROUTES ================= */}
+
 
         <Route
           path="/admin"
@@ -170,7 +173,9 @@ function App() {
           <Route path="categories" element={<ManageCategories />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="approval" element={<BookApproval />} />
+          <Route path="upcoming" element={<ManageUpcoming />} />
           <Route path="translation" element={<ManageTranslations />} />
+
           <Route path="subscribers" element={<Subscribers />} />
         </Route>
 

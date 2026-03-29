@@ -62,6 +62,8 @@ router.get("/", async (req, res) => {
 });
 
 
+
+
 // =====================================================
 // ADMIN ROUTES
 // =====================================================
@@ -76,7 +78,10 @@ router.get("/admin/stats", authMiddleware, adminOnly, async (req, res) => {
       0
     );
 
-    res.json({ totalBooks, totalLikes });
+    const upcomingCount = await Book.countDocuments({ status: "upcoming", softDelete: false });
+
+    res.json({ totalBooks, totalLikes, upcomingCount });
+
   } catch (err) {
     res.status(500).json({ message: "Error fetching stats" });
   }

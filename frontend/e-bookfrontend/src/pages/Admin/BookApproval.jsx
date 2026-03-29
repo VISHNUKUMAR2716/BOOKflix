@@ -6,6 +6,8 @@ const BookApproval = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [actionInProgress, setActionInProgress] = useState(null);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [selectedBookForSchedule, setSelectedBookForSchedule] = useState(null);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
@@ -77,7 +79,34 @@ const BookApproval = () => {
     setActionInProgress(null);
   };
 
+  /* ================= SCHEDULE ================= */
+  const handleSchedule = async (id) => {
+    if (!scheduleDate) {
+      alert("Please select a release date");
+      return;
+    }
+    setActionInProgress(id);
+    try {
+      await axios.put(
+        `http://localhost:5000/api/admin/books/${id}/schedule`,
+        { releaseDate: scheduleDate },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setMessage("Book scheduled for release");
+      setMessageType("success");
+      setScheduleDate("");
+      setSelectedBookForSchedule(null);
+      fetchPendingBooks();
+    } catch {
+      setMessage("Scheduling failed");
+      setMessageType("error");
+    }
+    setActionInProgress(null);
+  };
+
   return (
+
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 p-8">
 
       {/* HEADER */}
@@ -183,24 +212,56 @@ const BookApproval = () => {
                   </td>
 
                   <td className="px-6 py-4 text-right space-x-2">
+                    {selectedBookForSchedule === book._id ? (
+                      <div className="flex items-center justify-end gap-2">
+                        <input 
+                          type="datetime-local" 
+                          className="px-2 py-1 text-xs border rounded"
+                          value={scheduleDate}
+                          onChange={(e) => setScheduleDate(e.target.value)}
+                        />
+                        <button
+                          onClick={() => handleSchedule(book._id)}
+                          className="px-3 py-1 bg-purple-600 text-white rounded text-sm"
+                        >
+                          Confirm
+                        </button>
+                        <button
+                          onClick={() => setSelectedBookForSchedule(null)}
+                          className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          disabled={actionInProgress !== null}
+                          onClick={() => handleApprove(book._id)}
+                          className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
+                        >
+                          {actionInProgress === book._id ? "Processing..." : "Approve"}
+                        </button>
 
-                    <button
-                      disabled={actionInProgress !== null}
-                      onClick={() => handleApprove(book._id)}
-                      className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded text-sm"
-                    >
-                      {actionInProgress === book._id ? "Processing..." : "Approve"}
-                    </button>
+                        <button
+                          disabled={actionInProgress !== null}
+                          onClick={() => setSelectedBookForSchedule(book._id)}
+                          className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm"
+                        >
+                          Schedule
+                        </button>
 
-                    <button
-                      disabled={actionInProgress !== null}
-                      onClick={() => handleReject(book._id)}
-                      className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
-                    >
-                      {actionInProgress === book._id ? "Processing..." : "Reject"}
-                    </button>
-
+                        <button
+                          disabled={actionInProgress !== null}
+                          onClick={() => handleReject(book._id)}
+                          className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-sm"
+                        >
+                          {actionInProgress === book._id ? "Processing..." : "Reject"}
+                        </button>
+                      </>
+                    )}
                   </td>
+
 
                 </tr>
               ))}

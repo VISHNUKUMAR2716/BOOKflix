@@ -85,9 +85,10 @@ const bookSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
+      enum: ["pending", "approved", "rejected", "upcoming"],
       default: "pending",
     },
+
 
     ratings: [ratingSchema],
 
@@ -101,7 +102,13 @@ const bookSchema = new mongoose.Schema(
       default: 0,
     },
 
+    releaseDate: {
+      type: Date,
+      default: null,
+    },
+
     softDelete: {
+
       type: Boolean,
       default: false,
     },

@@ -16,6 +16,7 @@ const UploadBook = () => {
 
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [releaseDate, setReleaseDate] = useState("");
 
   const [step, setStep] = useState(1);
 
@@ -74,6 +75,10 @@ const UploadBook = () => {
       formData.append("audio", audio);
     }
     formData.append("thumbnail", thumbnail);
+    if (releaseDate) {
+      formData.append("releaseDate", releaseDate);
+    }
+
 
     try {
       await axios.post(
@@ -190,6 +195,21 @@ const UploadBook = () => {
                 ))}
               </select>
             </div>
+
+            {/* Schedule Release */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold mb-2 text-gray-700">
+                Schedule Release <span className="text-gray-400 font-normal">(Optional)</span>
+              </label>
+              <input
+                type="datetime-local"
+                className="w-full px-5 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                value={releaseDate}
+                onChange={(e) => setReleaseDate(e.target.value)}
+              />
+              <p className="text-[10px] text-gray-401 mt-1 italic">Leave empty for immediate review/approval.</p>
+            </div>
+
 
             {/* Next Button */}
             <button

@@ -10,6 +10,7 @@ import {
   FiSettings,
   FiEdit,
   FiArrowLeft,
+  FiCalendar,
 } from "react-icons/fi";
 
 export default function UserNavbar() {
@@ -128,6 +129,11 @@ export default function UserNavbar() {
           <Link to="/userupload" className={menuItem("/userupload")}>
             <FiUpload size={20} />
             {isOpen && <span>Upload Books</span>}
+          </Link>
+
+          <Link to="/upcoming" className={menuItem("/upcoming")}>
+            <FiCalendar size={20} />
+            {isOpen && <span>Upcoming</span>}
           </Link>
 
           <Link to="/settings" className={menuItem("/settings")}>

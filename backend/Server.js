@@ -14,6 +14,7 @@ const paymentRoutes = require("./routes/paymentRoutes");
 
 const { authMiddleware, adminOnly } = require("./middleware/auth");
 const adminRoutes = require("./routes/admin");
+const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/languages", languageRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.use("/api/admin", authMiddleware, adminOnly, adminRoutes);
 
@@ -96,7 +98,32 @@ mongoose
 
     const PORT = process.env.PORT || 5000;
 
-    app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT} 🚀`);
+
+      // ✅ AUTOMATED UPCOMING BOOKS RELEASE TASK
+      setInterval(async () => {
+        try {
+          const Book = require("./models/book");
+          const now = new Date();
+          const result = await Book.updateMany(
+            { 
+              status: "upcoming", 
+              releaseDate: { $lte: now } 
+            },
+            { 
+              $set: { status: "approved" } 
+            }
+          );
+          if (result.modifiedCount > 0) {
+            console.log(`[Automation] Released ${result.modifiedCount} upcoming books! ✅`);
+          }
+        } catch (error) {
+          console.error("[Automation Error] Failed to release upcoming books:", error);
+        }
+      }, 60000); // Check every minute
+    });
+
   })
   .catch((err) => {
     console.error("MongoDB connection failed ❌", err);

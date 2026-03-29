@@ -182,19 +182,67 @@ export default function Return() {
     }
   };
 
-  /* AI GENERATION */
+  /* AI GENERATION using Puter.js (Free OpenAI API) */
   const [isAILoading, setIsAILoading] = useState(false);
 
-  // NOTE: In a real production app, keep this in .env (e.g., import.meta.env.VITE_OPENAI_API_KEY)
-  const OPENAI_API_KEY = "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"; 
+  // Distribute overflow content from a page to subsequent pages
+  const distributeOverflow = (startIndex) => {
+    setPages((prevPages) => {
+      let newPages = [...prevPages];
+
+      const processPage = (idx) => {
+        const editor = editorRefs.current[idx];
+        if (!editor) return;
+
+        // Check if content overflows
+        while (editor.scrollHeight > editor.clientHeight) {
+          // Create next page if doesn't exist
+          if (idx >= newPages.length - 1) {
+            newPages = [...newPages, newPages.length];
+          }
+
+          // Wait for next page editor ref - we need to ensure it exists
+          // Move last text block to next page
+          const childNodes = Array.from(editor.childNodes);
+          if (childNodes.length <= 1) break; // Don't move if only one node left
+
+          // Find nodes to move: remove from the end until no overflow
+          const nodesToMove = [];
+          while (editor.scrollHeight > editor.clientHeight && childNodes.length > 1) {
+            const lastNode = childNodes.pop();
+            if (lastNode) {
+              nodesToMove.unshift(lastNode);
+              editor.removeChild(lastNode);
+            }
+          }
+
+          if (nodesToMove.length === 0) break;
+
+          // We need to defer moving nodes to next page after React renders it
+          setTimeout(() => {
+            const nextEditor = editorRefs.current[idx + 1];
+            if (nextEditor) {
+              // Prepend moved nodes to the beginning of next page
+              const firstChild = nextEditor.firstChild;
+              nodesToMove.forEach((node) => {
+                nextEditor.insertBefore(node, firstChild);
+              });
+
+              // Recursively check the next page for overflow
+              processPage(idx + 1);
+            }
+          }, 100);
+
+          return; // Exit while loop, recursion will handle the rest
+        }
+      };
+
+      processPage(startIndex);
+      return newPages;
+    });
+  };
 
   const handleAIGenerate = async () => {
-    let apiKey = OPENAI_API_KEY;
-    if (!apiKey || apiKey === "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") {
-      apiKey = prompt("Please enter your OpenAI API Key to use AI features:");
-      if (!apiKey) return;
-    }
-
     // Get all text from all pages
     const fullText = editorRefs.current
       .map((ed) => ed?.innerText || "")
@@ -210,34 +258,17 @@ export default function Return() {
     const activeEditor = editorRefs.current[activePage];
 
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo", // You can change this to "gpt-4" or "gpt-4o" if you have access
-          messages: [
-            {
-              role: "system",
-              content: "You are an expert story writer. Continue writing this story seamlessly from where it left off, matching the tone and style. Only return the continuation text itself. Do not include any preambles, titles, or explanations."
-            },
-            {
-              role: "user",
-              content: `Here is the story so far:\n\n${fullText}`
-            }
-          ]
-        }),
-      });
+      // Use Puter.js free OpenAI API — no API key needed!
+      const response = await window.puter.ai.chat(
+        `You are an expert story writer. Continue writing this story seamlessly from where it left off, matching the tone and style. Only return the continuation text itself. Do not include any preambles, titles, or explanations.\n\nHere is the story so far:\n\n${fullText}`,
+        { model: "gpt-4o-mini" }
+      );
 
-      const data = await response.json();
+      const generatedText = typeof response === "string" ? response : response?.message?.content || response?.toString() || "";
 
-      if (data.error) {
-        throw new Error(data.error.message);
+      if (!generatedText) {
+        throw new Error("No continuation received from AI");
       }
-
-      const generatedText = data.choices[0].message.content;
 
       // Ensure active editor has focus and move cursor to end
       if (activeEditor) {
@@ -247,16 +278,44 @@ export default function Return() {
         const range = document.createRange();
         const sel = window.getSelection();
         range.selectNodeContents(activeEditor);
-        range.collapse(false); // false means 'to the end'
+        range.collapse(false);
         sel.removeAllRanges();
         sel.addRange(range);
 
-        // Insert text with a leading space for continuity
-        document.execCommand("insertText", false, " " + generatedText.trim());
+        // Split generated text into paragraphs and insert as separate elements
+        const paragraphs = generatedText.trim().split(/\n\n|\n/);
+        
+        // Insert a leading space for continuity on the first paragraph
+        paragraphs.forEach((para, i) => {
+          const textToInsert = i === 0 ? " " + para : "\n" + para;
+          document.execCommand("insertText", false, textToInsert);
+        });
+
+        // After inserting, distribute overflow content across pages
+        setTimeout(() => {
+          distributeOverflow(activePage);
+          
+          // Update active page to the last page after distribution
+          setTimeout(() => {
+            const lastPageIndex = editorRefs.current.length - 1;
+            const lastEditor = editorRefs.current[lastPageIndex];
+            if (lastEditor) {
+              lastEditor.focus();
+              setActivePage(lastPageIndex);
+              // Move cursor to end
+              const r = document.createRange();
+              const s = window.getSelection();
+              r.selectNodeContents(lastEditor);
+              r.collapse(false);
+              s.removeAllRanges();
+              s.addRange(r);
+            }
+          }, 500);
+        }, 50);
       }
     } catch (error) {
       console.error("AI Generation Error:", error);
-      alert(`AI Generation failed: ${error.message}\nPlease check your API Key.`);
+      alert(`AI Generation failed: ${error.message}`);
     } finally {
       setIsAILoading(false);
     }

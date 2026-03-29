@@ -72,7 +72,15 @@ router.put(
   adminController.rejectBook,
 );
 
+router.put(
+  "/books/:id/schedule",
+  authMiddleware,
+  isAdmin,
+  adminController.scheduleBook,
+);
+
 // User management
+
 router.get("/users", authMiddleware, isAdmin, adminController.getAllUsers);
 router.delete(
   "/users/:id",

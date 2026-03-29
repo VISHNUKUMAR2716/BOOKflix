@@ -51,10 +51,10 @@ router.put("/:id/toggle", authMiddleware, adminOnly, async (req, res) => {
   try {
     const lang = await Language.findById(req.params.id);
     if (!lang) return res.status(404).json({ message: "Language not found" });
-    
+
     lang.isActive = !lang.isActive;
     await lang.save();
-    
+
     res.json({ message: "Language status updated", language: lang });
   } catch (err) {
     res.status(500).json({ message: "Error toggling language" });
@@ -71,12 +71,12 @@ router.post("/", authMiddleware, adminOnly, async (req, res) => {
     const existing = await Language.findOne({ code: code.toLowerCase() });
     if (existing) return res.status(400).json({ message: "Language code already exists" });
 
-    const newLang = new Language({ 
-      name: name.trim(), 
-      code: code.trim().toLowerCase(), 
-      isActive: true 
+    const newLang = new Language({
+      name: name.trim(),
+      code: code.trim().toLowerCase(),
+      isActive: true
     });
-    
+
     await newLang.save();
     res.status(201).json({ message: "Language added successfully", language: newLang });
   } catch (err) {

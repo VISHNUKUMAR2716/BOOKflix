@@ -97,14 +97,21 @@ export default function UserDashboard() {
   useEffect(() => {
     let filtered = books;
 
-    if (search) {
+    if (activeTab === "books") {
+      // Library shows only approved, pending and upcoming (but filtered below)
+      filtered = filtered.filter((book) => book.status === "approved" || book.status === "pending" || book.status === "upcoming");
+    } else if (activeTab === "trace") {
+      // Trace shows only rejected
+      filtered = filtered.filter((book) => book.status === "rejected");
+    }
+
+    if (search && activeTab === "books") {
       filtered = filtered.filter((book) =>
         book.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    if (category !== "All") {
-      // The book category is a reference ID or nested object, so we must check name/ID
+    if (category !== "All" && activeTab === "books") {
       filtered = filtered.filter((book) =>
         book.category === category ||
         (book.category && book.category._id === category) ||
@@ -113,7 +120,7 @@ export default function UserDashboard() {
     }
 
     setFilteredBooks(filtered);
-  }, [search, category, books]);
+  }, [search, category, books, activeTab]);
 
   /* ================= LIKE ================= */
 
@@ -211,7 +218,7 @@ export default function UserDashboard() {
           {/* Main Tabs Override (Books vs Posts) & Search */}
           <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-2xl shadow-sm mb-10 gap-4 mt-4">
             <div className="flex gap-4">
-              {["books", "posts", "people"].map((tab) => (
+              {["books", "posts", "people", "trace"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -220,7 +227,7 @@ export default function UserDashboard() {
                       : "bg-gray-100 text-gray-500 hover:bg-gray-200"
                     }`}
                 >
-                  {tab === "books" ? "Library" : tab === "posts" ? "Community" : "People"}
+                  {tab === "books" ? "Library" : tab === "posts" ? "Community" : tab === "people" ? "People" : "Trace"}
                 </button>
               ))}
             </div>
@@ -306,23 +313,75 @@ export default function UserDashboard() {
             </motion.div>
           )}
 
-          {/* ================= BOOKS GRID ================= */}
+          {/* ================= UPCOMING / COMING SOON ================= */}
+          {!loading && activeTab === "books" && search === "" && category === "All" && books.filter(b => b.status === "upcoming").length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-16 bg-gradient-to-br from-indigo-50 to-purple-50 p-10 rounded-[4rem] border border-indigo-100/50 shadow-inner"
+            >
+              <div className="flex items-center justify-between mb-10">
+                <div className="flex items-center gap-4">
+                  <div className="bg-purple-500/20 p-3 rounded-2xl">
+                    <Bell className="w-6 h-6 text-purple-600 animate-bounce" />
+                  </div>
+                  <h2 className="text-4xl font-black text-gray-900 tracking-tight">Coming Soon</h2>
+                </div>
+                <div className="flex gap-2">
+                  <span className="text-[10px] font-black bg-purple-100 text-purple-600 px-3 py-1 rounded-lg uppercase tracking-widest">Next Release</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                {books.filter(b => b.status === "upcoming").map((book) => (
+                  <div 
+                    key={`upcoming-${book._id}`} 
+                    className="group cursor-pointer"
+                    onClick={() => alert("Stay tuned! This book is coming soon to BookFlix.")}
+                  >
+                    <div className="aspect-[2/3] w-full rounded-2xl overflow-hidden mb-3 relative bg-gray-200 shadow-md transform group-hover:-translate-y-2 transition-transform duration-500">
+                      <img 
+                        src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                        alt={book.title}
+                        className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 transition duration-700"
+                      />
+                      <div className="absolute inset-0 bg-indigo-900/40 opacity-40 group-hover:opacity-0 transition-opacity"></div>
+                      <div className="absolute top-3 right-3">
+                        <span className="bg-purple-600 text-[10px] font-black px-3 py-1 rounded-full text-white shadow-lg uppercase tracking-widest border border-purple-400">
+                          PRE-ORDER
+                        </span>
+                      </div>
+                    </div>
+                    <h3 className="text-sm font-black text-gray-900 line-clamp-1 group-hover:text-purple-600 transition truncate px-1">{book.title}</h3>
+                    {book.releaseDate && (
+                      <p className="text-[10px] text-purple-500 font-bold px-1">
+                        Releases: {new Date(book.releaseDate).toLocaleDateString()}
+                      </p>
+                    )}
+
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ================= BOOKS & TRACE GRID ================= */}
           <AnimatePresence mode="wait">
-            {!loading && activeTab === "books" && (
+            {!loading && (activeTab === "books" || activeTab === "trace") && (
               <motion.div
-                key="books"
+                key={activeTab}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                {filteredBooks.length === 0 ? (
+                {filteredBooks.filter(b => b.status !== "upcoming").length === 0 ? (
                   <div className="text-center py-24 text-gray-400">
-                    <p className="text-xl font-medium">No books match your criteria</p>
+                    <p className="text-xl font-medium">No books found in this section</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-x-12 gap-y-16">
-                    {filteredBooks.map((book, index) => {
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-x-8 md:gap-y-12">
+                    {filteredBooks.filter(b => b.status !== "upcoming").map((book, index) => {
                       const liked = book.likes?.includes(userId);
 
                       return (
@@ -334,59 +393,83 @@ export default function UserDashboard() {
                           className="group flex flex-col cursor-pointer"
                         >
                           {/* Image */}
-                          <div
-                            className="w-full h-72 md:h-80 overflow-hidden rounded-3xl mb-5 shadow-sm relative bg-gray-100"
-                            onClick={() => {
-                              if (!currentUser || currentUser.subscription?.status !== "active") {
-                                navigate("/subscription");
-                                return;
-                              }
+                            <div
+                              className="w-full aspect-[2/3] overflow-hidden rounded-[2rem] mb-4 shadow-md relative bg-gray-100 group-hover:shadow-xl transition-all duration-500"
+                              onClick={() => {
+                                if (book.status !== "approved") {
+                                  alert(`This book is currently ${book.status}. You can only read or listen to approved books.`);
+                                  return;
+                                }
+                                
+                                if (!currentUser || currentUser.subscription?.status !== "active") {
+                                  navigate("/subscription");
+                                  return;
+                                }
 
-                              // Increment views in backend
-                              axios.put(`http://localhost:5000/api/books/${book._id}/view`).catch(err => console.error("Failed to update view count", err));
+                                // Increment views in backend
+                                axios.put(`http://localhost:5000/api/books/${book._id}/view`).catch(err => console.error("Failed to update view count", err));
 
-                              navigate("/read", {
-                                state: {
-                                  pdfUrl: `http://localhost:5000/uploads/${book.pdf}`,
-                                  audioUrl: book.audio ? `http://localhost:5000/uploads/${book.audio}` : null,
-                                },
-                              });
-                            }}
-                          >
-                            <img
-                              src={`http://localhost:5000/uploads/${book.thumbnail}`}
-                              alt={book.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
-                            />
-                            {/* Overlay Play Icon on Hover */}
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <div className="bg-white/90 p-4 rounded-full shadow-lg backdrop-blur-sm">
-                                <Play className="w-6 h-6 text-gray-900 fill-gray-900 ml-1" />
+                                navigate("/read", {
+                                  state: {
+                                    pdfUrl: `http://localhost:5000/uploads/${book.pdf}`,
+                                    audioUrl: book.audio ? `http://localhost:5000/uploads/${book.audio}` : null,
+                                  },
+                                });
+                              }}
+                            >
+                              <img
+                                src={`http://localhost:5000/uploads/${book.thumbnail}`}
+                                alt={book.title}
+                                className={`w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out ${book.status !== 'approved' ? 'opacity-50 grayscale' : ''}`}
+                              />
+                              
+                              {/* STATUS BADGE */}
+                              <div className="absolute top-4 right-4 z-20">
+                                <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-md backdrop-blur-md border border-white/20 ${
+                                  book.status === "approved" 
+                                    ? "bg-emerald-500/90 text-white" 
+                                    : book.status === "pending"
+                                      ? "bg-amber-500/90 text-white"
+                                      : book.status === "upcoming"
+                                        ? "bg-purple-500/90 text-white"
+                                        : "bg-rose-500/90 text-white"
+                                }`}>
+                                  {book.status}
+                                </span>
                               </div>
+
+                              {/* Overlay Play Icon on Hover */}
+                              {book.status === "approved" && (
+                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <div className="bg-white/90 p-4 rounded-full shadow-lg backdrop-blur-sm">
+                                    <Play className="w-6 h-6 text-gray-900 fill-gray-900 ml-1" />
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          </div>
+
 
                           {/* Info */}
-                          <div className="flex justify-between items-start px-2">
-                            <div>
-                              <h2 className="text-2xl font-bold text-gray-900 tracking-tight leading-tight">
-                                {book.title}
-                              </h2>
-                              <p className="text-gray-500 text-sm font-medium mt-1 uppercase tracking-wider">
+                          <div className="px-1">
+                            <h2 className="text-lg font-black text-gray-900 tracking-tight leading-tight line-clamp-1 group-hover:text-[#10b981] transition-colors">
+                              {book.title}
+                            </h2>
+                            <div className="flex justify-between items-center mt-1.5">
+                              <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest truncate max-w-[70%]">
                                 {book.author}
                               </p>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-3">
+                              
                               <button
-                                onClick={() => handleLike(book._id)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 transition"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleLike(book._id);
+                                }}
+                                className="flex items-center gap-1 hover:scale-110 transition active:scale-95"
                               >
                                 <Heart
-                                  className={`w-5 h-5 transition ${liked ? 'text-red-500 fill-red-500' : 'text-gray-400'}`}
+                                  className={`w-3.5 h-3.5 transition-all ${liked ? 'text-red-500 fill-red-500' : 'text-gray-300'}`}
                                 />
-                                <span className="text-sm font-bold text-gray-600">{book.likes?.length || 0}</span>
+                                <span className="text-[10px] font-black text-gray-400">{book.likes?.length || 0}</span>
                               </button>
                             </div>
                           </div>
