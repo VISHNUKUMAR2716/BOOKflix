@@ -18,7 +18,7 @@ export default function PostFeed() {
 
   const fetchPosts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/posts/feed");
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/posts/feed");
       setPosts(res.data || []);
     } catch {
       setError("Failed to load posts");
@@ -30,7 +30,7 @@ export default function PostFeed() {
   const handleLike = async (postId) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/posts/${postId}/like`,
+        `https://bookflix-1-o3od.onrender.com/api/posts/${postId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -44,7 +44,7 @@ export default function PostFeed() {
 
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/posts/${postId}/comment`,
+        `https://bookflix-1-o3od.onrender.com/api/posts/${postId}/comment`,
         { text: newComment[postId] },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -57,7 +57,7 @@ export default function PostFeed() {
   const handleDeletePost = async (postId) => {
     if (!window.confirm("Delete this post?")) return;
 
-    await axios.delete(`http://localhost:5000/api/posts/${postId}`, {
+    await axios.delete(`https://bookflix-1-o3od.onrender.com/api/posts/${postId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -66,7 +66,7 @@ export default function PostFeed() {
 
   const handleIncreaseViews = async (postId) => {
     try {
-      await axios.put(`http://localhost:5000/api/posts/${postId}/view`);
+      await axios.put(`https://bookflix-1-o3od.onrender.com/api/posts/${postId}/view`);
     } catch {}
   };
 
@@ -149,7 +149,7 @@ export default function PostFeed() {
                   {post.images?.map((img, i) => (
                     <img
                       key={i}
-                      src={`http://localhost:5000/uploads/${img}`}
+                      src={`https://bookflix-1-o3od.onrender.com/uploads/${img}`}
                       className="rounded-xl object-cover w-full h-48 hover:scale-105 transition"
                     />
                   ))}
@@ -158,7 +158,7 @@ export default function PostFeed() {
                     <video
                       key={i}
                       controls
-                      src={`http://localhost:5000/uploads/${vid}`}
+                      src={`https://bookflix-1-o3od.onrender.com/uploads/${vid}`}
                       className="rounded-xl object-cover w-full h-48"
                     />
                   ))}

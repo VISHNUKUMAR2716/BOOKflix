@@ -18,7 +18,7 @@ const BookApproval = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/admin/books/pending",
+        "https://bookflix-1-o3od.onrender.com/api/admin/books/pending",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -44,7 +44,7 @@ const BookApproval = () => {
     setActionInProgress(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/books/${id}/approve`,
+        `https://bookflix-1-o3od.onrender.com/api/admin/books/${id}/approve`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -64,7 +64,7 @@ const BookApproval = () => {
     setActionInProgress(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/books/${id}/reject`,
+        `https://bookflix-1-o3od.onrender.com/api/admin/books/${id}/reject`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -88,7 +88,7 @@ const BookApproval = () => {
     setActionInProgress(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/books/${id}/schedule`,
+        `https://bookflix-1-o3od.onrender.com/api/admin/books/${id}/schedule`,
         { releaseDate: scheduleDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );

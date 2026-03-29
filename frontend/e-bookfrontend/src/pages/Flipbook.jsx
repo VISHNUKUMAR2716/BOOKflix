@@ -44,7 +44,7 @@ export default function FlipBook() {
     const fetchLanguages = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/languages/active", {
+        const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/languages/active", {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.data.length > 0) {

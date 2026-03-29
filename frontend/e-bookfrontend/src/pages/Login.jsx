@@ -30,7 +30,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://bookflix-1-o3od.onrender.com/api/auth/login",
         formData
       );
 
@@ -70,7 +70,7 @@ function Login() {
     setError("");
     
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/google", {
+      const res = await axios.post("https://bookflix-1-o3od.onrender.com/api/auth/google", {
         token: credentialResponse.credential
       });
 

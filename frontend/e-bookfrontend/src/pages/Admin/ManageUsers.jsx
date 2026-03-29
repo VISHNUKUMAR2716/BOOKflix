@@ -9,7 +9,7 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/users", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/admin/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(Array.isArray(res.data) ? res.data : []);
@@ -26,7 +26,7 @@ const ManageUsers = () => {
   const deleteUser = async (id) => {
     if (!window.confirm("Delete this user permanently?")) return;
 
-    await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
+    await axios.delete(`https://bookflix-1-o3od.onrender.com/api/admin/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -36,8 +36,8 @@ const ManageUsers = () => {
   /* ================= BLOCK / UNBLOCK ================= */
   const toggleBlock = async (user) => {
     const url = user.blocked
-      ? `http://localhost:5000/api/admin/users/${user._id}/unblock`
-      : `http://localhost:5000/api/admin/users/${user._id}/block`;
+      ? `https://bookflix-1-o3od.onrender.com/api/admin/users/${user._id}/unblock`
+      : `https://bookflix-1-o3od.onrender.com/api/admin/users/${user._id}/block`;
 
     await axios.put(
       url,
@@ -53,7 +53,7 @@ const ManageUsers = () => {
     const newRole = role === "admin" ? "user" : "admin";
 
     await axios.put(
-      `http://localhost:5000/api/admin/users/${id}/role`,
+      `https://bookflix-1-o3od.onrender.com/api/admin/users/${id}/role`,
       { role: newRole },
       { headers: { Authorization: `Bearer ${token}` } }
     );

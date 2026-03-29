@@ -10,7 +10,7 @@ const TestCategories = () => {
     setResult("Testing categories endpoint...");
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/books/categories",
+        "https://bookflix-1-o3od.onrender.com/api/books/categories",
       );
       console.log("Categories Response:", response.data);
       setResult(`SUCCESS: ${JSON.stringify(response.data, null, 2)}`);

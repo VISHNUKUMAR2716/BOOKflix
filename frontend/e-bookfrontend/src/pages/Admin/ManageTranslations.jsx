@@ -19,7 +19,7 @@ export default function ManageTranslations() {
 
   const fetchLanguages = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/languages/all", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/languages/all", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLanguages(res.data);
@@ -34,7 +34,7 @@ export default function ManageTranslations() {
   const toggleLanguage = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/languages/${id}/toggle`,
+        `https://bookflix-1-o3od.onrender.com/api/languages/${id}/toggle`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -56,7 +56,7 @@ export default function ManageTranslations() {
     setSuccessMsg("");
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/languages",
+        "https://bookflix-1-o3od.onrender.com/api/languages",
         { name: newName, code: newCode },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -75,7 +75,7 @@ export default function ManageTranslations() {
     if (!window.confirm("Are you sure you want to delete this language completely?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/languages/${id}`, {
+      await axios.delete(`https://bookflix-1-o3od.onrender.com/api/languages/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLanguages(prev => prev.filter(lang => lang._id !== id));

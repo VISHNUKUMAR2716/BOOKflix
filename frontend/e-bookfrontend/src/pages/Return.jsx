@@ -114,7 +114,7 @@ export default function Return() {
   useEffect(() => {
     // Fetch categories when component mounts
     axios
-      .get("http://localhost:5000/api/books/categories")
+      .get("https://bookflix-1-o3od.onrender.com/api/books/categories")
       .then((res) => setCategories(res.data || []))
       .catch((err) => console.error("Failed to load categories", err));
   }, []);
@@ -161,7 +161,7 @@ export default function Return() {
 
       // 3. Upload to backend
       await axios.post(
-        "http://localhost:5000/api/books/user-upload",
+        "https://bookflix-1-o3od.onrender.com/api/books/user-upload",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

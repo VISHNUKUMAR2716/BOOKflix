@@ -17,7 +17,7 @@ const ManagePosts = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/admin/posts", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/admin/posts", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(Array.isArray(res.data) ? res.data : []);
@@ -42,7 +42,7 @@ const ManagePosts = () => {
     setActionInProgress(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/posts/${id}/publish`,
+        `https://bookflix-1-o3od.onrender.com/api/admin/posts/${id}/publish`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -61,7 +61,7 @@ const ManagePosts = () => {
     setActionInProgress(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/posts/${id}/unpublish`,
+        `https://bookflix-1-o3od.onrender.com/api/admin/posts/${id}/unpublish`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -81,7 +81,7 @@ const ManagePosts = () => {
 
     setActionInProgress(id);
     try {
-      await axios.delete(`http://localhost:5000/api/admin/posts/${id}`, {
+      await axios.delete(`https://bookflix-1-o3od.onrender.com/api/admin/posts/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -220,7 +220,7 @@ const ManagePosts = () => {
                     <div className="flex items-center gap-2">
                       {post.author?.photo && (
                         <img
-                          src={`http://localhost:5000/uploads/${post.author.photo}`}
+                          src={`https://bookflix-1-o3od.onrender.com/uploads/${post.author.photo}`}
                           className="w-8 h-8 rounded-full object-cover"
                           alt=""
                         />

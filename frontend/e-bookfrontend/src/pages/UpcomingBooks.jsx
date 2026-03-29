@@ -12,7 +12,7 @@ const UpcomingBooks = () => {
     const fetchUpcoming = async () => {
       try {
         // Fetch all books and filter for upcoming
-        const res = await axios.get("http://localhost:5000/api/books");
+        const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/books");
         const upcoming = res.data.filter((b) => b.status === "upcoming");
         setBooks(upcoming);
       } catch (error) {
@@ -72,7 +72,7 @@ const UpcomingBooks = () => {
               >
                 <div className="relative aspect-[3/4] rounded-3xl overflow-hidden mb-6 bg-gray-100">
                   <img 
-                    src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                    src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                     alt={book.title}
                     className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-110 transition duration-700"
                   />

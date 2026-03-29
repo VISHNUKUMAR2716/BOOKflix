@@ -28,7 +28,7 @@ const UploadBook = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/books/categories")
+      .get("https://bookflix-1-o3od.onrender.com/api/books/categories")
       .then((res) => setCategories(res.data || []))
       .catch(() => setCategories([]));
   }, []);
@@ -82,7 +82,7 @@ const UploadBook = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/books/user-upload",
+        "https://bookflix-1-o3od.onrender.com/api/books/user-upload",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -33,7 +33,7 @@ export default function UserNavbar() {
     if (!userId || !token) return;
 
     axios
-      .get(`http://localhost:5000/api/auth/profile/${userId}`, {
+      .get(`https://bookflix-1-o3od.onrender.com/api/auth/profile/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -102,7 +102,7 @@ export default function UserNavbar() {
             <div className="w-20 h-20 rounded-full overflow-hidden border shadow">
               {user.photo ? (
                 <img
-                  src={`http://localhost:5000/uploads/${user.photo}`}
+                  src={`https://bookflix-1-o3od.onrender.com/uploads/${user.photo}`}
                   alt="profile"
                   className="w-full h-full object-cover"
                 />

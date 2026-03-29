@@ -11,7 +11,7 @@ export default function UploadedBooks() {
     const fetchBooks = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:5000/api/books"
+                "https://bookflix-1-o3od.onrender.com/api/books"
             );
             setBooks(res.data);
         } catch (error) {
@@ -29,7 +29,7 @@ export default function UploadedBooks() {
         try {
             const token = localStorage.getItem("token");
             await axios.delete(
-                `http://localhost:5000/api/books/${id}`,
+                `https://bookflix-1-o3od.onrender.com/api/books/${id}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
@@ -55,7 +55,7 @@ export default function UploadedBooks() {
         try {
             const token = localStorage.getItem("token");
             const res = await axios.put(
-                `http://localhost:5000/api/books/${id}`,
+                `https://bookflix-1-o3od.onrender.com/api/books/${id}`,
                 editData,
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -103,7 +103,7 @@ export default function UploadedBooks() {
                             {/* Image (Square crop) */}
                             <div className="w-full aspect-square bg-gray-100 flex items-center justify-center relative group">
                                 <img 
-                                    src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                                    src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                                     alt={book.title} 
                                     className="w-full h-full object-cover"
                                 />

@@ -32,7 +32,7 @@ export default function ManageBooks() {
   const fetchBooks = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/books", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/admin/books", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBooks(Array.isArray(res.data) ? res.data : []);
@@ -44,7 +44,7 @@ export default function ManageBooks() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/categories", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/admin/categories", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (Array.isArray(res.data)) {
@@ -81,7 +81,7 @@ export default function ManageBooks() {
     if (releaseDate) formData.append("releaseDate", releaseDate);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/books/upload", formData, {
+      const res = await axios.post("https://bookflix-1-o3od.onrender.com/api/books/upload", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage("✅ Book uploaded successfully!");
@@ -96,7 +96,7 @@ export default function ManageBooks() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this book?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/books/${id}`, {
+      await axios.delete(`https://bookflix-1-o3od.onrender.com/api/books/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage("✅ Book deleted successfully");
@@ -118,7 +118,7 @@ export default function ManageBooks() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/admin/books/${editingBook._id}`, {
+      await axios.put(`https://bookflix-1-o3od.onrender.com/api/admin/books/${editingBook._id}`, {
         title: editTitle,
         author: editAuthor,
         category: editCategory,
@@ -220,7 +220,7 @@ export default function ManageBooks() {
                     <tr key={book._id} className="hover:bg-slate-50 transition group">
                       <td className="px-6 py-4">
                         <img 
-                          src={book.thumbnail?.startsWith("http") ? book.thumbnail : `http://localhost:5000/uploads/${book.thumbnail}`} 
+                          src={book.thumbnail?.startsWith("http") ? book.thumbnail : `https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                           alt={book.title} 
                           className="w-12 h-16 object-cover rounded-md shadow-sm group-hover:scale-110 transition duration-300"
                         />

@@ -30,7 +30,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
+      await axios.post("https://bookflix-1-o3od.onrender.com/api/auth/register", formData);
 
       alert("Registration successful 🎉");
       navigate("/");
@@ -46,7 +46,7 @@ export default function Register() {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/google", {
+      const res = await axios.post("https://bookflix-1-o3od.onrender.com/api/auth/google", {
         token: credentialResponse.credential
       });
 

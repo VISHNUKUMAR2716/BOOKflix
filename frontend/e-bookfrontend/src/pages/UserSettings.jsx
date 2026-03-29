@@ -27,7 +27,7 @@ const UserSettings = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/auth/profile/${userId}`, {
+      .get(`https://bookflix-1-o3od.onrender.com/api/auth/profile/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -35,7 +35,7 @@ const UserSettings = () => {
           name: res.data.name,
           email: res.data.email,
         });
-        setPhotoPreview(`http://localhost:5000/uploads/${res.data.photo}`);
+        setPhotoPreview(`https://bookflix-1-o3od.onrender.com/uploads/${res.data.photo}`);
         setSubscription(res.data.subscription);
         setLoading(false);
       })
@@ -68,7 +68,7 @@ const UserSettings = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/auth/profile/${userId}`,
+        `https://bookflix-1-o3od.onrender.com/api/auth/profile/${userId}`,
         data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -89,7 +89,7 @@ const UserSettings = () => {
   const handleDeleteAccount = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/auth/profile/${userId}`,
+        `https://bookflix-1-o3od.onrender.com/api/auth/profile/${userId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       localStorage.clear();

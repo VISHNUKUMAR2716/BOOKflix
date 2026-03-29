@@ -99,7 +99,7 @@ export default function CreatePost() {
       });
 
       await axios.post(
-        "http://localhost:5000/api/posts/create",
+        "https://bookflix-1-o3od.onrender.com/api/posts/create",
         postData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

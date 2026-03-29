@@ -13,7 +13,7 @@ export default function Subscribers() {
 
   const fetchSubscribers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/admin/subscriptions", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/admin/subscriptions", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSubscribers(res.data);
@@ -64,7 +64,7 @@ export default function Subscribers() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <img 
-                          src={`http://localhost:5000/uploads/${user.photo}`} 
+                          src={`https://bookflix-1-o3od.onrender.com/uploads/${user.photo}`} 
                           onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}` }}
                           className="w-10 h-10 rounded-full object-cover bg-gray-200"
                         />

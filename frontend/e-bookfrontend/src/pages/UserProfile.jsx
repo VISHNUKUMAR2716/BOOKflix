@@ -25,7 +25,7 @@ export default function UserProfile() {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:5000/api/users/${id}`, {
+      const res = await axios.get(`https://bookflix-1-o3od.onrender.com/api/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(res.data);
@@ -46,7 +46,7 @@ export default function UserProfile() {
   const handleFollowToggle = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/users/${id}/follow`,
+        `https://bookflix-1-o3od.onrender.com/api/users/${id}/follow`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -103,7 +103,7 @@ export default function UserProfile() {
                 <div className="w-32 h-32 rounded-full border-4 border-white shadow-md overflow-hidden bg-gray-200 shrink-0">
                   <img 
                     src={profile.photo && profile.photo !== "default-avatar.png" 
-                      ? `http://localhost:5000/uploads/${profile.photo}` 
+                      ? `https://bookflix-1-o3od.onrender.com/uploads/${profile.photo}` 
                       : `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=random`} 
                     alt={profile.name}
                     className="w-full h-full object-cover"
@@ -193,7 +193,7 @@ export default function UserProfile() {
                       onClick={() => navigate(`/profile/${follower._id}`)}
                     >
                       <img 
-                        src={follower.photo && follower.photo !== "default-avatar.png" ? `http://localhost:5000/uploads/${follower.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(follower.name)}`} 
+                        src={follower.photo && follower.photo !== "default-avatar.png" ? `https://bookflix-1-o3od.onrender.com/uploads/${follower.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(follower.name)}`} 
                         className="w-12 h-12 rounded-full"
                         alt={follower.name}
                       />
@@ -229,7 +229,7 @@ export default function UserProfile() {
                       onClick={() => navigate(`/profile/${followedUser._id}`)}
                     >
                       <img 
-                        src={followedUser.photo && followedUser.photo !== "default-avatar.png" ? `http://localhost:5000/uploads/${followedUser.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(followedUser.name)}`} 
+                        src={followedUser.photo && followedUser.photo !== "default-avatar.png" ? `https://bookflix-1-o3od.onrender.com/uploads/${followedUser.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(followedUser.name)}`} 
                         className="w-12 h-12 rounded-full"
                         alt={followedUser.name}
                       />

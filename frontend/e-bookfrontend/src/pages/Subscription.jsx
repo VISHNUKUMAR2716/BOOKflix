@@ -15,7 +15,7 @@ export default function Subscription() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/auth/profile", {
+        const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/auth/profile", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setCurrentUser(res.data);
@@ -31,7 +31,7 @@ export default function Subscription() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "http://localhost:5000/api/payment/activate",
+        "https://bookflix-1-o3od.onrender.com/api/payment/activate",
         { plan: planName },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -11,7 +11,7 @@ const ManageUpcoming = () => {
   const fetchUpcoming = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/books", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/books", {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Filter for upcoming status
@@ -32,7 +32,7 @@ const ManageUpcoming = () => {
   const handleReleaseNow = async (id) => {
     if (!window.confirm("Are you sure you want to release this book immediately?")) return;
     try {
-      await axios.put(`http://localhost:5000/api/admin/books/${id}/approve`, {}, {
+      await axios.put(`https://bookflix-1-o3od.onrender.com/api/admin/books/${id}/approve`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessage("Book released successfully!");
@@ -88,7 +88,7 @@ const ManageUpcoming = () => {
             <div key={book._id} className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100 flex gap-6">
               <div className="w-32 h-44 rounded-2xl overflow-hidden bg-gray-100 shrink-0">
                 <img 
-                  src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                  src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                   alt={book.title}
                   className="w-full h-full object-cover"
                 />

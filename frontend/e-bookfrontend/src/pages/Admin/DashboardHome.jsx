@@ -23,7 +23,7 @@ export default function DashboardHome() {
         const token = localStorage.getItem("token");
 
         const res = await axios.get(
-          "http://localhost:5000/api/books/admin/stats",
+          "https://bookflix-1-o3od.onrender.com/api/books/admin/stats",
           {
             headers: {
               Authorization: `Bearer ${token}`,

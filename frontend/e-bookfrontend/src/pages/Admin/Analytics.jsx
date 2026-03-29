@@ -12,7 +12,7 @@ const Analytics = () => {
   useEffect(() => {
     const fetchBooksForAnalytics = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/books");
+        const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/books");
         setBooks(res.data || []);
       } catch (err) {
         console.error("Failed to fetch analytics data", err);
@@ -141,7 +141,7 @@ const Analytics = () => {
                   <div key={book._id} className="flex items-center gap-4">
                     <div className="text-xl font-black text-gray-300 w-6">#{index + 1}</div>
                     <img 
-                      src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                      src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                       alt={book.title} 
                       className="w-12 h-16 object-cover rounded shadow-sm"
                     />

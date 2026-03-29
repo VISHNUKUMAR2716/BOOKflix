@@ -19,7 +19,7 @@ const ManageCategories = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        "http://localhost:5000/api/admin/categories",
+        "https://bookflix-1-o3od.onrender.com/api/admin/categories",
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setCategories(Array.isArray(res.data) ? res.data : []);
@@ -51,14 +51,14 @@ const ManageCategories = () => {
 
       if (editingCategory) {
         await axios.put(
-          `http://localhost:5000/api/admin/categories/${editingCategory._id}`,
+          `https://bookflix-1-o3od.onrender.com/api/admin/categories/${editingCategory._id}`,
           { name },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setMessage("Category updated successfully");
       } else {
         await axios.post(
-          "http://localhost:5000/api/admin/categories",
+          "https://bookflix-1-o3od.onrender.com/api/admin/categories",
           { name },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -86,7 +86,7 @@ const ManageCategories = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/admin/categories/${id}`,
+        `https://bookflix-1-o3od.onrender.com/api/admin/categories/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 

@@ -29,7 +29,7 @@ export default function UserDashboard() {
   const fetchBooks = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/books");
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/books");
       setBooks(res.data);
       setFilteredBooks(res.data);
     } catch (err) {
@@ -41,7 +41,7 @@ export default function UserDashboard() {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/users", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
@@ -52,7 +52,7 @@ export default function UserDashboard() {
 
   const fetchCurrentUserProfile = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/profile", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/auth/profile", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCurrentUser(res.data);
@@ -63,7 +63,7 @@ export default function UserDashboard() {
 
   const fetchRecommendations = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/books/recommendations", {
+      const res = await axios.get("https://bookflix-1-o3od.onrender.com/api/books/recommendations", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRecommendedBooks(res.data);
@@ -81,7 +81,7 @@ export default function UserDashboard() {
 
     // Fetch Dynamic Categories from Database
     axios
-      .get("http://localhost:5000/api/books/categories")
+      .get("https://bookflix-1-o3od.onrender.com/api/books/categories")
       .then((res) => setDbCategories(res.data || []))
       .catch((err) => console.error("Failed to fetch categories", err));
   }, []);
@@ -127,7 +127,7 @@ export default function UserDashboard() {
   const handleLike = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/books/${id}/like`,
+        `https://bookflix-1-o3od.onrender.com/api/books/${id}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -145,7 +145,7 @@ export default function UserDashboard() {
   const handleFollowToggle = async (targetId) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/users/${targetId}/follow`,
+        `https://bookflix-1-o3od.onrender.com/api/users/${targetId}/follow`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -278,19 +278,19 @@ export default function UserDashboard() {
                         }
   
                         // Increment views in backend
-                        axios.put(`http://localhost:5000/api/books/${book._id}/view`).catch(err => console.error("Failed to update view count", err));
+                        axios.put(`https://bookflix-1-o3od.onrender.com/api/books/${book._id}/view`).catch(err => console.error("Failed to update view count", err));
   
                         navigate("/read", {
                           state: {
-                            pdfUrl: `http://localhost:5000/uploads/${book.pdf}`,
-                            audioUrl: book.audio ? `http://localhost:5000/uploads/${book.audio}` : null,
+                            pdfUrl: `https://bookflix-1-o3od.onrender.com/uploads/${book.pdf}`,
+                            audioUrl: book.audio ? `https://bookflix-1-o3od.onrender.com/uploads/${book.audio}` : null,
                           },
                         });
                       }}
                   >
                     <div className="h-40 w-full rounded-2xl overflow-hidden mb-4 relative bg-gray-100">
                       <img 
-                        src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                        src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                         alt={book.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                       />
@@ -341,7 +341,7 @@ export default function UserDashboard() {
                   >
                     <div className="aspect-[2/3] w-full rounded-2xl overflow-hidden mb-3 relative bg-gray-200 shadow-md transform group-hover:-translate-y-2 transition-transform duration-500">
                       <img 
-                        src={`http://localhost:5000/uploads/${book.thumbnail}`} 
+                        src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`} 
                         alt={book.title}
                         className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 transition duration-700"
                       />
@@ -407,18 +407,18 @@ export default function UserDashboard() {
                                 }
 
                                 // Increment views in backend
-                                axios.put(`http://localhost:5000/api/books/${book._id}/view`).catch(err => console.error("Failed to update view count", err));
+                                axios.put(`https://bookflix-1-o3od.onrender.com/api/books/${book._id}/view`).catch(err => console.error("Failed to update view count", err));
 
                                 navigate("/read", {
                                   state: {
-                                    pdfUrl: `http://localhost:5000/uploads/${book.pdf}`,
-                                    audioUrl: book.audio ? `http://localhost:5000/uploads/${book.audio}` : null,
+                                    pdfUrl: `https://bookflix-1-o3od.onrender.com/uploads/${book.pdf}`,
+                                    audioUrl: book.audio ? `https://bookflix-1-o3od.onrender.com/uploads/${book.audio}` : null,
                                   },
                                 });
                               }}
                             >
                               <img
-                                src={`http://localhost:5000/uploads/${book.thumbnail}`}
+                                src={`https://bookflix-1-o3od.onrender.com/uploads/${book.thumbnail}`}
                                 alt={book.title}
                                 className={`w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out ${book.status !== 'approved' ? 'opacity-50 grayscale' : ''}`}
                               />
@@ -517,7 +517,7 @@ export default function UserDashboard() {
                     return (
                       <div key={u._id} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center transition hover:shadow-md">
                         <img
-                          src={u.photo && u.photo !== "default-avatar.png" ? `http://localhost:5000/uploads/${u.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}`}
+                          src={u.photo && u.photo !== "default-avatar.png" ? `https://bookflix-1-o3od.onrender.com/uploads/${u.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}`}
                           alt={u.name}
                           className="w-24 h-24 rounded-full mb-4 cursor-pointer hover:opacity-80 transition object-cover"
                           onClick={() => navigate(`/profile/${u._id}`)}
