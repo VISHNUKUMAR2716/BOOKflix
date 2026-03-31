@@ -96,7 +96,7 @@ export default function ManageBooks() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this book?")) return;
     try {
-      await axios.delete(`https://bookflix-1-o3od.onrender.com/api/books/${id}`, {
+      await axios.delete(`https://bookflix-1-o3od.onrender.com/api/admin/books/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage("✅ Book deleted successfully");

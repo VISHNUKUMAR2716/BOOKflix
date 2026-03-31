@@ -178,9 +178,12 @@ export default function UserDashboard() {
           </div>
 
           {/* TITLE */}
-          <h1 className="text-5xl font-black text-gray-900 mt-12 tracking-tight" style={{ fontFamily: "'Nunito', sans-serif" }}>
-            Best Books
-          </h1>
+          <div className="flex items-center gap-6 mt-12 mb-4">
+            <img src="/logo.jpeg" alt="Logo" className="w-20 h-20 object-cover rounded-2xl shadow-md" />
+            <h1 className="text-5xl font-black text-gray-900 tracking-tight" style={{ fontFamily: "'Nunito', sans-serif" }}>
+              BookFlix
+            </h1>
+          </div>
 
           {/* PILL TABS (Dynamic Categories from DB) */}
           <div className="flex flex-wrap items-center gap-8 mt-10 ml-2">

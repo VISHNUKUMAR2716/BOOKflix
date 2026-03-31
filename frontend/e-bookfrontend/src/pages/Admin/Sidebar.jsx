@@ -39,14 +39,12 @@ function Sidebar() {
       {/* Logo Area */}
       <div className="p-8 border-b border-gray-100/80">
         <div className="flex items-center mb-2">
-          {/* Colorful Stacked Squares Logo */}
-          <div className="relative w-8 h-8 mr-3">
-            <div className="absolute top-0 left-0 w-4 h-4 bg-[#8FE25A] rounded-sm mix-blend-multiply"></div>
-            <div className="absolute top-1.5 left-1.5 w-4 h-4 bg-[#FF4D8B] rounded-sm mix-blend-multiply"></div>
-            <div className="absolute top-3 left-3 w-4 h-4 bg-[#4A90E2] rounded-sm mix-blend-multiply"></div>
+          {/* BookFlix Logo */}
+          <div className="relative mr-3">
+            <img src="/logo.jpeg" alt="Logo" className="w-10 h-10 object-cover rounded shadow" />
           </div>
           <h2 className="text-[26px] font-black tracking-tight text-black">
-            Admin Panel
+            BookFlix
           </h2>
         </div>
         <p className="text-[13px] text-gray-400 tracking-wide font-medium ml-1">

@@ -90,9 +90,12 @@ export default function Register() {
 
         <div className="w-full max-w-sm">
 
-          <h1 className="text-2xl font-bold text-indigo-600 mb-10">
-            NovaSpace
-          </h1>
+          <div className="mb-10 flex items-center gap-3">
+            <img src="/logo.jpeg" alt="Logo" className="w-12 h-12 object-cover rounded-xl shadow-sm" />
+            <h1 className="text-2xl font-black text-gray-900 tracking-tight" style={{ fontFamily: "'Nunito', sans-serif" }}>
+              BookFlix
+            </h1>
+          </div>
 
           <h2 className="text-3xl font-bold text-gray-800 mb-2">
             Create Account
@@ -214,7 +217,7 @@ export default function Register() {
       <div className="hidden md:flex md:w-[65%] items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 p-12">
         <div className="text-center max-w-lg">
           <h2 className="text-4xl font-bold text-gray-800 mb-6">
-            Join NovaSpace Today
+            Join BookFlix Today
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed">
             Create your workspace, collaborate with your team,

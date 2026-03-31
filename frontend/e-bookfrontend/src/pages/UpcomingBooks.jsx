@@ -25,10 +25,10 @@ const UpcomingBooks = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="flex min-h-screen bg-[#fafafa]">
       <UserNavbar />
       
-      <main className="max-w-7xl mx-auto px-6 pt-32 pb-20">
+      <main className="flex-1 overflow-y-auto max-w-7xl mx-auto px-6 pt-12 pb-20">
         {/* HERO SECTION */}
         <div className="relative mb-20">
           <motion.div 
@@ -36,7 +36,7 @@ const UpcomingBooks = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-600 rounded-full text-xs font-black uppercase tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-600 rounded-full text-xs font-black uppercase tracking-widest mb-6 mt-10">
               <Calendar className="w-3 h-3" />
               Coming Soon to BookFlix
             </div>
