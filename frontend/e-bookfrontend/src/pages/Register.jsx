@@ -91,7 +91,7 @@ export default function Register() {
         <div className="w-full max-w-sm">
 
           <div className="mb-10 flex items-center gap-3">
-            <img src="/logo.jpeg" alt="Logo" className="w-12 h-12 object-cover rounded-xl shadow-sm" />
+            <img src="/bookflix.jpeg" alt="Logo" className="w-12 h-12 object-cover rounded-xl shadow-sm" />
             <h1 className="text-2xl font-black text-gray-900 tracking-tight" style={{ fontFamily: "'Nunito', sans-serif" }}>
               BookFlix
             </h1>

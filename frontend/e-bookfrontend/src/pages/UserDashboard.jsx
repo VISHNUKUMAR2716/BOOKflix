@@ -179,7 +179,7 @@ export default function UserDashboard() {
 
           {/* TITLE */}
           <div className="flex items-center gap-6 mt-12 mb-4">
-            <img src="/logo.jpeg" alt="Logo" className="w-20 h-20 object-cover rounded-2xl shadow-md" />
+            <img src="./bookflix.jpeg" alt="Logo" className="w-20 h-20 object-cover rounded-2xl shadow-md" />
             <h1 className="text-5xl font-black text-gray-900 tracking-tight" style={{ fontFamily: "'Nunito', sans-serif" }}>
               BookFlix
             </h1>

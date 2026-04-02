@@ -41,7 +41,7 @@ function Sidebar() {
         <div className="flex items-center mb-2">
           {/* BookFlix Logo */}
           <div className="relative mr-3">
-            <img src="/logo.jpeg" alt="Logo" className="w-10 h-10 object-cover rounded shadow" />
+            <img src="/bookflix.jpeg" alt="Logo" className="w-10 h-10 object-cover rounded shadow" />
           </div>
           <h2 className="text-[26px] font-black tracking-tight text-black">
             BookFlix
